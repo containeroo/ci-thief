@@ -25,10 +25,8 @@ brews:
     homepage: https://containeroo.ch
     description: Simple CLI tool to fetch GitLab CI variables and output them as exportable environment variables.
     license: GNU General Public License v3.0
-    test: |
-      system "#{bin}/ci-thief --version"
     dependencies:
       - name: go
         type: optional
     install: |-
-      bin.install "ci-thief
+      bin.install "ci-thief"
