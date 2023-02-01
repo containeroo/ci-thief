@@ -14,20 +14,23 @@ func main() {
 		fmt.Println("Please provide a project id")
 		os.Exit(1)
 	}
-	if ok := os.Getenv("GITLAB_URL"); ok == "" {
-		fmt.Println("error: GITLAB_URL environment variable is not set")
+
+	gitlabHost := os.Getenv("GITLAB_HOST")
+	if gitlabHost == "" {
+		fmt.Println("error: GITLAB_HOST environment variable is not set")
 		os.Exit(1)
 	}
-	if ok := os.Getenv("GITLAB_TOKEN"); ok == "" {
+
+	gitlabToken := os.Getenv("GITLAB_TOKEN")
+	if gitlabToken == "" {
 		fmt.Println("error: GITLAB_TOKEN environment variable is not set")
 		os.Exit(1)
 	}
 
-	gitlabUrl := os.Getenv("GITLAB_URL")
 	projectId, _ := strconv.Atoi(os.Args[1])
-	apiUrl := fmt.Sprintf("https://%s/api/v4/projects/%d/variables", gitlabUrl, projectId)
+	apiUrl := fmt.Sprintf("https://%s/api/v4/projects/%d/variables", gitlabHost, projectId)
 	req, _ := http.NewRequest("GET", apiUrl, nil)
-	req.Header.Add("PRIVATE-TOKEN", os.Getenv("GITLAB_TOKEN"))
+	req.Header.Add("PRIVATE-TOKEN", gitlabToken)
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
@@ -36,6 +39,11 @@ func main() {
 		os.Exit(1)
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode != 200 {
+		fmt.Println("Error: Gitlab API returned non-200 status code")
+		os.Exit(1)
+	}
 
 	body, _ := io.ReadAll(resp.Body)
 	var variables []map[string]interface{}
