@@ -31,7 +31,7 @@ ci-thief 123
 
 ## Environment Variables
 
-| Variable     | Description                          |
-| ------------ | ------------------------------------ |
-| GITLAB_HOST  | The hostname of your GitLab instance |
-| GITLAB_TOKEN | The GitLab API token                 |
+| Variable     | Description                               |
+| ------------ | ----------------------------------------- |
+| GITLAB_HOST  | The hostname of your GitLab instance      |
+| GITLAB_TOKEN | The GitLab API token (PAT with api scope) |
