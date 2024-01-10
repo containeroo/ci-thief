@@ -1,14 +1,5 @@
 # ci-thief
 
-<!--toc:start-->
-
-- [ci-thief](#ci-thief)
-  - [Installation](#installation)
-    - [macOS (Homebrew)](#macos-homebrew)
-  - [Usage](#usage)
-  - [Environment Variables](#environment-variables)
-  <!--toc:end-->
-
 Simple CLI tool to fetch GitLab CI variables and output them as exportable
 environment variables.
 
@@ -22,16 +13,22 @@ brew install containeroo/tap/ci-thief
 
 ## Usage
 
-```shell
-export GITLAB_HOST=git.example.com
-export GITLAB_TOKEN=your-gitlab-token
+```text
+Fetch GitLab CI variables from a project
 
-ci-thief 123
+Usage:
+  ci-thief [PROJECT_ID] [flags]
+  ci-thief [command]
+
+Available Commands:
+  completion  Generate the autocompletion script for the specified shell
+  help        Help about any command
+  login       Login to GitLab
+  version     Print the version of ci-thief
+
+Flags:
+  -h, --help            help for ci-thief
+  -R, --non-recursive   Do not fetch variables from parent groups
+
+Use "ci-thief [command] --help" for more information about a command.
 ```
-
-## Environment Variables
-
-| Variable     | Description                               |
-| ------------ | ----------------------------------------- |
-| GITLAB_HOST  | The hostname of your GitLab instance      |
-| GITLAB_TOKEN | The GitLab API token (PAT with api scope) |
