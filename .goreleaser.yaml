@@ -17,7 +17,7 @@ builds:
       - arm
 brews:
   - name: ci-thief
-    tap:
+    repository:
       owner: containeroo
       name: homebrew-tap
       token: "{{ .Env.TAP_GITHUB_TOKEN }}"
