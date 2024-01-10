@@ -1,5 +1,5 @@
 {
   "extends": ["config:base"],
-  "labels": ["dependencies"],
+  "labels": ["dependency"],
   "postUpdateOptions": ["gomodTidy"]
 }
