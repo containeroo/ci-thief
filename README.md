@@ -24,6 +24,7 @@ Available Commands:
   completion  Generate the autocompletion script for the specified shell
   help        Help about any command
   login       Login to GitLab
+  logout      Logout from GitLab
   version     Print the version of ci-thief
 
 Flags:
@@ -31,4 +32,19 @@ Flags:
   -R, --non-recursive   Do not fetch variables from parent groups
 
 Use "ci-thief [command] --help" for more information about a command.
+```
+
+Example:
+
+```bash
+ci-thief 1234
+```
+
+And you will get something like this:
+
+```bash
+# env scope *
+export MY_ENV_VAR='secret value'
+# env scope parentgroup/*
+export MY_OTHER_ENV_VAR='another secret value'
 ```
