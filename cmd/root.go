@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"strconv"
 
 	"github.com/containeroo/ci-thief/internal"
 	"github.com/spf13/cobra"
@@ -18,7 +17,7 @@ var (
 var output = make(map[string][]string)
 
 func appendOutput(scope, key, value string) {
-	output[scope] = append(output[scope], fmt.Sprintf("export %s=%s", key, strconv.Quote(value)))
+	output[scope] = append(output[scope], fmt.Sprintf("export %s='%s'", key, value))
 }
 
 func fetchProjectVars(projectID string) {
