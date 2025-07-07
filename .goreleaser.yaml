@@ -1,4 +1,5 @@
 ---
+version: 2
 project_name: ci-thief
 before:
   hooks:
@@ -15,28 +16,12 @@ builds:
       - amd64
       - arm64
       - arm
-brews:
-  - name: ci-thief
-    repository:
+homebrew_casks:
+  - repository:
       owner: containeroo
       name: homebrew-tap
       token: "{{ .Env.TAP_GITHUB_TOKEN }}"
-    folder: Formula
+      branch: master
     homepage: https://containeroo.ch
     description: Simple CLI tool to fetch GitLab CI variables and output them as exportable environment variables.
     license: GNU General Public License v3.0
-    test: |
-      system "#{bin}/ci-thief version"
-    dependencies:
-      - name: go
-        type: optional
-    install: |-
-      bin.install "ci-thief"
-
-      # Install bash completion
-      output = Utils.safe_popen_read(bin/"ci-thief", "completion", "bash")
-      (bash_completion/"ci-thief").write output
-
-      # Install zsh completion
-      output = Utils.safe_popen_read(bin/"ci-thief", "completion", "zsh")
-      (zsh_completion/"_ci-thief").write output
