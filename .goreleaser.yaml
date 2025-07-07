@@ -25,3 +25,12 @@ homebrew_casks:
     homepage: https://containeroo.ch
     description: Simple CLI tool to fetch GitLab CI variables and output them as exportable environment variables.
     license: GNU General Public License v3.0
+    hooks:
+      post:
+        install: |
+          if system_command("/usr/bin/xattr", args: ["-h"]).exit_status == 0
+            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/ci-thief"]
+          end
+    zap:
+      trash:
+        - "~/.config/ci-thief"
