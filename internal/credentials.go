@@ -18,11 +18,11 @@ func getGitlabCredentials() (GitlabLogin, error) {
 	gitlabCredentials := GitlabLogin{}
 	file, err := os.ReadFile(filepath.Join(ConfigDir, "login.json"))
 	if err != nil {
-		return gitlabCredentials, fmt.Errorf("Could not find GitLab credentials file. Please run 'ci-thief login' first.")
+		return gitlabCredentials, fmt.Errorf("could not find GitLab credentials file, please run 'ci-thief login' first")
 	}
 
 	if err := json.Unmarshal([]byte(file), &gitlabCredentials); err != nil {
-		return gitlabCredentials, fmt.Errorf("Could not parse GitLab credentials file. Please run 'ci-thief login' again.")
+		return gitlabCredentials, fmt.Errorf("could not parse GitLab credentials file, please run 'ci-thief login' again")
 	}
 
 	return gitlabCredentials, nil

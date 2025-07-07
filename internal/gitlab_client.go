@@ -3,7 +3,7 @@ package internal
 import (
 	"fmt"
 
-	"github.com/xanzy/go-gitlab"
+	"gitlab.com/gitlab-org/api/client-go"
 )
 
 func NewGitlabClient() (*gitlab.Client, error) {

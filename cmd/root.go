@@ -6,7 +6,7 @@ import (
 
 	"github.com/containeroo/ci-thief/internal"
 	"github.com/spf13/cobra"
-	"github.com/xanzy/go-gitlab"
+	"gitlab.com/gitlab-org/api/client-go"
 )
 
 var (
