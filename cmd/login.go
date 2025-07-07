@@ -9,6 +9,7 @@ import (
 	"github.com/containeroo/ci-thief/internal"
 	"github.com/spf13/cobra"
 	"gitlab.com/gitlab-org/api/client-go"
+	"golang.org/x/term"
 )
 
 var loginCmd = &cobra.Command{
@@ -23,9 +24,23 @@ var loginCmd = &cobra.Command{
 				return
 			}
 		}
+
+		gitlabToken := cmd.Flag("token").Value.String()
+		if gitlabToken == "" {
+			fmt.Print("Enter GitLab access token: ")
+			gitlabTokenBytes, err := term.ReadPassword(int(os.Stdin.Fd()))
+			if err != nil {
+				fmt.Println("Could not read GitLab token:", err)
+				return
+			}
+			fmt.Println()
+
+			gitlabToken = string(gitlabTokenBytes)
+		}
+
 		gitlabLogin := internal.GitlabLogin{
 			Hostname: cmd.Flag("hostname").Value.String(),
-			Token:    cmd.Flag("token").Value.String(),
+			Token:    gitlabToken,
 		}
 
 		fileContent, err := json.Marshal(gitlabLogin)
@@ -57,10 +72,6 @@ func init() {
 	loginCmd.Flags().String("hostname", "", "GitLab Hostname (e.g. gitlab.example.com)")
 	loginCmd.Flags().String("token", "", "Personal access token (api scope)")
 	if err := loginCmd.MarkFlagRequired("hostname"); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-	if err := loginCmd.MarkFlagRequired("token"); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
