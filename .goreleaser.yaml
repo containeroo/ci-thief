@@ -14,7 +14,7 @@ builds:
     goarch:
       - amd64
       - arm64
-homebrew_casks:
+brews:
   - repository:
       owner: containeroo
       name: homebrew-tap
@@ -23,9 +23,13 @@ homebrew_casks:
     homepage: https://containeroo.ch
     description: Simple CLI tool to fetch GitLab CI variables and output them as exportable environment variables.
     license: GNU General Public License v3.0
-    hooks:
-      post:
-        install: |
-          if system_command("/usr/bin/xattr", args: ["-h"]).exit_status == 0
-            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/ci-thief"]
-          end
+    install: |-
+      bin.install "ci-thief"
+
+      # Install bash completion
+      output = Utils.safe_popen_read(bin/"ci-thief", "completion", "bash")
+      (bash_completion/"ci-thief").write output
+
+      # Install zsh completion
+      output = Utils.safe_popen_read(bin/"ci-thief", "completion", "zsh")
+      (zsh_completion/"_ci-thief").write output
