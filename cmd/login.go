@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/containeroo/ci-thief/internal"
 	"github.com/spf13/cobra"
-	"gitlab.com/gitlab-org/api/client-go"
 	"golang.org/x/term"
 )
 
@@ -17,12 +17,9 @@ var loginCmd = &cobra.Command{
 	Short: "Login to GitLab",
 	Args:  cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-		if _, err := os.Stat(internal.ConfigDir); os.IsNotExist(err) {
-			err := os.Mkdir(internal.ConfigDir, 0o755)
-			if err != nil {
-				fmt.Println("Could not create config directory:", err)
-				return
-			}
+		if err := os.MkdirAll(internal.ConfigDir, 0o700); err != nil {
+			fmt.Fprintln(os.Stderr, "Could not create config directory:", err)
+			os.Exit(1)
 		}
 
 		gitlabToken := cmd.Flag("token").Value.String()
@@ -30,40 +27,47 @@ var loginCmd = &cobra.Command{
 			fmt.Print("Enter GitLab access token: ")
 			gitlabTokenBytes, err := term.ReadPassword(int(os.Stdin.Fd()))
 			if err != nil {
-				fmt.Println("Could not read GitLab token:", err)
-				return
+				fmt.Fprintln(os.Stderr, "Could not read GitLab token:", err)
+				os.Exit(1)
 			}
 			fmt.Println()
 
 			gitlabToken = string(gitlabTokenBytes)
 		}
+		gitlabToken = strings.TrimSpace(gitlabToken)
+		if gitlabToken == "" {
+			fmt.Fprintln(os.Stderr, "GitLab token cannot be empty")
+			os.Exit(1)
+		}
 
 		gitlabLogin := internal.GitlabLogin{
-			Hostname: cmd.Flag("hostname").Value.String(),
+			Hostname: strings.TrimSpace(cmd.Flag("hostname").Value.String()),
 			Token:    gitlabToken,
+		}
+
+		gitlabClient, err := internal.NewGitlabClientFromCredentials(gitlabLogin)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "Could not create GitLab client:", err)
+			os.Exit(1)
+		}
+		currentUser, _, err := gitlabClient.Users.CurrentUser()
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "Could not login to GitLab:", err)
+			os.Exit(1)
 		}
 
 		fileContent, err := json.Marshal(gitlabLogin)
 		if err != nil {
-			fmt.Println("Could not marshal GitLab credentials:", err)
-			os.Exit(1)
-		}
-		if err := os.WriteFile(filepath.Join(internal.ConfigDir, "login.json"), fileContent, 0o644); err != nil {
-			fmt.Println("Could not write GitLab credentials file:", err)
+			fmt.Fprintln(os.Stderr, "Could not marshal GitLab credentials:", err)
 			os.Exit(1)
 		}
 
-		gitlabClient, err := internal.NewGitlabClient()
-		if err != nil {
-			fmt.Println("Could not create GitLab client:", err)
-		}
-		_, _, err = gitlabClient.Users.ListUsers(&gitlab.ListUsersOptions{})
-		if err != nil {
-			fmt.Println("Could not login to GitLab:", err)
-			return
+		if err := os.WriteFile(filepath.Join(internal.ConfigDir, "login.json"), fileContent, 0o600); err != nil {
+			fmt.Fprintln(os.Stderr, "Could not write GitLab credentials file:", err)
+			os.Exit(1)
 		}
 
-		fmt.Printf("Login to %s successful", gitlabLogin.Hostname)
+		fmt.Printf("Login to %s successful as %s\n", gitlabLogin.Hostname, currentUser.Username)
 	},
 }
 

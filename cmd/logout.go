@@ -19,7 +19,7 @@ var logoutCmd = &cobra.Command{
 			return
 		}
 		if err := os.Remove(filepath.Join(internal.ConfigDir, "login.json")); err != nil {
-			fmt.Println("Could not delete GitLab credentials file:", err)
+			fmt.Fprintln(os.Stderr, "Could not delete GitLab credentials file:", err)
 			os.Exit(1)
 		}
 		fmt.Println("Logout successful")

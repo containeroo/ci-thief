@@ -12,7 +12,16 @@ type GitlabLogin struct {
 	Token    string `json:"token"`
 }
 
-var ConfigDir = filepath.Join(os.Getenv("HOME"), "/.config/ci-thief")
+func defaultConfigDir() string {
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		return filepath.Join(".config", "ci-thief")
+	}
+
+	return filepath.Join(homeDir, ".config", "ci-thief")
+}
+
+var ConfigDir = defaultConfigDir()
 
 func getGitlabCredentials() (GitlabLogin, error) {
 	gitlabCredentials := GitlabLogin{}
