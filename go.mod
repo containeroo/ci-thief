@@ -1,6 +1,6 @@
 module github.com/containeroo/ci-thief
 
-go 1.24.4
+go 1.26.0
 
 require (
 	github.com/spf13/cobra v1.10.2
