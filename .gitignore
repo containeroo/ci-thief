@@ -1,1 +1,3 @@
-.github/release-notes.md
+.gocache/
+.gomodcache/
+completions/

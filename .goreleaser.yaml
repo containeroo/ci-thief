@@ -4,6 +4,9 @@ project_name: ci-thief
 before:
   hooks:
     - go mod tidy
+    - mkdir -p completions
+    - sh -c "go run . completion bash > completions/ci-thief.bash"
+    - sh -c "go run . completion zsh > completions/ci-thief.zsh"
 builds:
   - main: ./main.go
     env:
