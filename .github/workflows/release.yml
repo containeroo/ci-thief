@@ -31,7 +31,7 @@ jobs:
         with:
           configuration: ".github/changelog-configuration.json"
           ignorePreReleases: "${{ !contains(github.ref, '-rc') }}"
-          outputFile: .github/release-notes.md
+          outputFile: ${{ runner.temp }}/release-notes.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Run GoReleaser
@@ -39,7 +39,7 @@ jobs:
         if: success() && startsWith(github.ref, 'refs/tags/')
         with:
           version: latest
-          args: release --release-notes .github/release-notes.md
+          args: release --release-notes ${{ runner.temp }}/release-notes.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAP_GITHUB_TOKEN: ${{ secrets.TAP_GITHUB_TOKEN }}
