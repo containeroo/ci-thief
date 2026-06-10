@@ -4,7 +4,7 @@ go 1.26.0
 
 require (
 	github.com/spf13/cobra v1.10.2
-	gitlab.com/gitlab-org/api/client-go/v2 v2.36.3
+	gitlab.com/gitlab-org/api/client-go/v2 v2.38.0
 	golang.org/x/term v0.44.0
 )
 
@@ -16,5 +16,5 @@ require (
 	github.com/spf13/pflag v1.0.9 // indirect
 	golang.org/x/oauth2 v0.36.0 // indirect
 	golang.org/x/sys v0.46.0 // indirect
-	golang.org/x/time v0.14.0 // indirect
+	golang.org/x/time v0.15.0 // indirect
 )
