@@ -4,7 +4,6 @@ go 1.26.0
 
 require (
 	github.com/spf13/cobra v1.10.2
-	gitlab.com/gitlab-org/api/client-go/v2 v2.64.0
 	gitlab.com/gitlab-org/api/client-go/v3 v3.0.0
 	golang.org/x/term v0.45.0
 )

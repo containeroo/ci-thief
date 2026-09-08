@@ -6,7 +6,7 @@ import (
 	"path"
 	"strings"
 
-	"gitlab.com/gitlab-org/api/client-go/v2"
+	gitlab "gitlab.com/gitlab-org/api/client-go/v3"
 )
 
 func buildGitlabAPIBaseURL(hostname string) (string, error) {
