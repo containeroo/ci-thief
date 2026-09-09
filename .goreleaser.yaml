@@ -36,9 +36,12 @@ homebrew_casks:
     completions:
       bash: completions/ci-thief.bash
       zsh: completions/ci-thief.zsh
-    hooks:
-      post:
-        install: |
-          if OS.mac?
-            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/ci-thief"]
-          end
+    # Lifecycle hooks emit deprecated postflight blocks; use the structured DSL.
+    custom_block: |
+      postflight_steps do
+        on_macos do
+          run "/usr/bin/xattr",
+              args: ["-dr", "com.apple.quarantine", "{{ "{{staged_path}}" }}/ci-thief"],
+              must_succeed: false
+        end
+      end
