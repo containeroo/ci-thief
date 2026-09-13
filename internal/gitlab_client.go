@@ -34,6 +34,7 @@ func buildGitlabAPIBaseURL(hostname string) (string, error) {
 	return baseURL.String(), nil
 }
 
+// NewGitlabClientFromCredentials creates a GitLab client from explicit credentials.
 func NewGitlabClientFromCredentials(gitlabCredentials GitlabLogin) (*gitlab.Client, error) {
 	apiBaseURL, err := buildGitlabAPIBaseURL(gitlabCredentials.Hostname)
 	if err != nil {
@@ -48,6 +49,7 @@ func NewGitlabClientFromCredentials(gitlabCredentials GitlabLogin) (*gitlab.Clie
 	return gitlabClient, nil
 }
 
+// NewGitlabClient creates a GitLab client from the stored credentials.
 func NewGitlabClient() (*gitlab.Client, error) {
 	gitlabCredentials, err := getGitlabCredentials()
 	if err != nil {

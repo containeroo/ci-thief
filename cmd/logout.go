@@ -13,7 +13,7 @@ var logoutCmd = &cobra.Command{
 	Use:   "logout",
 	Short: "Logout from GitLab",
 	Args:  cobra.NoArgs,
-	Run: func(cmd *cobra.Command, args []string) {
+	Run: func(_ *cobra.Command, _ []string) {
 		if _, err := os.Stat(filepath.Join(internal.ConfigDir, "login.json")); os.IsNotExist(err) {
 			fmt.Println("Not logged in")
 			return

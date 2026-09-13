@@ -95,11 +95,12 @@ func fetchGroupVars(groupID int64, output map[string][]string, scopeOrder *[]str
 	return nil
 }
 
+// RootCmd is the root command for ci-thief.
 var RootCmd = &cobra.Command{
 	Use:   "ci-thief [PROJECT_ID]",
 	Short: "Fetch GitLab CI variables from a project",
 	Args:  cobra.ExactArgs(1),
-	Run: func(cmd *cobra.Command, args []string) {
+	Run: func(_ *cobra.Command, args []string) {
 		var err error
 		gitlabClient, err = internal.NewGitlabClient()
 		if err != nil {
@@ -140,6 +141,7 @@ var RootCmd = &cobra.Command{
 	},
 }
 
+// Execute runs the ci-thief command-line interface.
 func Execute() {
 	RootCmd.Flags().BoolVarP(&fetchNonRecursive, "non-recursive", "R", false, "Do not fetch variables from parent groups")
 	if err := RootCmd.Execute(); err != nil {

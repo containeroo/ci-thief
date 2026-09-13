@@ -1,3 +1,4 @@
+// Package internal provides ci-thief's GitLab and credential helpers.
 package internal
 
 import (
@@ -7,6 +8,7 @@ import (
 	"path/filepath"
 )
 
+// GitlabLogin contains the credentials used to access a GitLab instance.
 type GitlabLogin struct {
 	Hostname string `json:"server"`
 	Token    string `json:"token"`
@@ -21,6 +23,7 @@ func defaultConfigDir() string {
 	return filepath.Join(homeDir, ".config", "ci-thief")
 }
 
+// ConfigDir is the directory containing ci-thief's configuration files.
 var ConfigDir = defaultConfigDir()
 
 func getGitlabCredentials() (GitlabLogin, error) {

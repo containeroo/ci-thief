@@ -1,3 +1,4 @@
+// Package cmd implements the ci-thief command-line interface.
 package cmd
 
 import (
@@ -16,7 +17,7 @@ var loginCmd = &cobra.Command{
 	Use:   "login",
 	Short: "Login to GitLab",
 	Args:  cobra.NoArgs,
-	Run: func(cmd *cobra.Command, args []string) {
+	Run: func(cmd *cobra.Command, _ []string) {
 		if err := os.MkdirAll(internal.ConfigDir, 0o700); err != nil {
 			fmt.Fprintln(os.Stderr, "Could not create config directory:", err)
 			os.Exit(1)
