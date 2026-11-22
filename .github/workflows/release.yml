@@ -5,6 +5,7 @@ on:
   push:
     tags:
       - "v*"
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -17,7 +18,22 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
+      - name: Set up Homebrew tap SSH access
+        env:
+          TAP_DEPLOY_KEY: ${{ secrets.HOMEBREW_TAP_DEPLOY_KEY }}
+        run: |
+          umask 077
+          test -n "$TAP_DEPLOY_KEY"
+          printf '%s\n' "$TAP_DEPLOY_KEY" > "$RUNNER_TEMP/homebrew-tap-key"
+          printf '%s\n' 'github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl' \
+            > "$RUNNER_TEMP/homebrew-tap-known-hosts"
+          printf 'GIT_SSH_COMMAND=ssh -F /dev/null -i "%s" -o IdentityAgent=none -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile="%s"\n' \
+            "$RUNNER_TEMP/homebrew-tap-key" "$RUNNER_TEMP/homebrew-tap-known-hosts" >> "$GITHUB_ENV"
+      - name: Verify Homebrew tap write access
+        if: github.event_name == 'workflow_dispatch'
+        run: git push --dry-run ssh://git@github.com/containeroo/homebrew-tap.git HEAD:refs/heads/ci-thief-release-check
       - name: Set up Go
+        if: github.event_name == 'push'
         uses: actions/setup-go@v7
         with:
           go-version-file: go.mod
@@ -26,7 +42,6 @@ jobs:
         uses: goreleaser/goreleaser-action@v7
         with:
           version: latest
-          args: release --clean
+          args: ${{ github.event_name == 'push' && 'release --clean' || 'check' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAP_GITHUB_TOKEN: ${{ secrets.TAP_GITHUB_TOKEN }}

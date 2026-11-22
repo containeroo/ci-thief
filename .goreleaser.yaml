@@ -26,10 +26,11 @@ archives:
       - completions/*
 homebrew_casks:
   - repository:
-      owner: containeroo
-      name: homebrew-tap
-      token: "{{ .Env.TAP_GITHUB_TOKEN }}"
       branch: master
+      git:
+        url: ssh://git@github.com/containeroo/homebrew-tap.git
+        private_key: "{{ .Env.RUNNER_TEMP }}/homebrew-tap-key"
+        ssh_command: "{{ .Env.GIT_SSH_COMMAND }}"
     homepage: https://containeroo.ch
     description: Simple CLI tool to fetch GitLab CI variables and output them as exportable environment variables.
     license: GNU General Public License v3.0
