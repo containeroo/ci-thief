@@ -9,6 +9,8 @@ before:
     - sh -c "go run . completion zsh > completions/ci-thief.zsh"
 builds:
   - main: ./main.go
+    ldflags:
+      - -s -w -X github.com/containeroo/ci-thief/cmd.version={{ .Version }}
     env:
       - CGO_ENABLED=0
     goos:
