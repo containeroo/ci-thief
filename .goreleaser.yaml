@@ -26,6 +26,8 @@ archives:
       - completions/*
 homebrew_casks:
   - repository:
+      owner: containeroo
+      name: homebrew-tap
       branch: master
       git:
         url: ssh://git@github.com/containeroo/homebrew-tap.git
